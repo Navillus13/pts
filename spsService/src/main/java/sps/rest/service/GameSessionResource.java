@@ -32,7 +32,7 @@ import sps.schema.utils.MappingUtils;
 
 /** Example resource class hosted at the URI path "/myresource"
  */
-@Path("/gameSession")
+@Path("/gamesession")
 public class GameSessionResource {
 	
 	private EntityManagerFactory entityManagerFactory = PersistenceUtil.getEntityManagerFactory();
@@ -190,5 +190,7 @@ public class GameSessionResource {
 
 		return Response.ok(getReply()).build();
 	}	
+	
+	
 	
 }

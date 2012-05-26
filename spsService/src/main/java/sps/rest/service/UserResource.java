@@ -438,6 +438,39 @@ public class UserResource {
 		return Response.ok(getReply()).build();
 	}	
 	
+	@POST
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Path("/{userId}/gamesession/{gameSessionId}/")
+	public Response addUserToGameSession(SpsRequest spsRequest,
+			@PathParam("userId") long userId,
+			@PathParam("gameSessionId") long gameSessionId) {
+		GameSessionUser gameSessionUser = null;
+		GameSession gameSession = null;
+		GameSessionType gameSessionType;
+		GameSessionUtil gsu = new GameSessionUtil(entityManager);
+		QuestionUtil qu = new QuestionUtil(entityManager);
+		UsersUtil uu = new UsersUtil(entityManager);
+		Users user = null;
+
+		// Find the user
+		entityManager.clear();
+		entityManager.getTransaction().begin();
+		gameSessionUser = new GameSessionUser();
+		user = uu.findUser(userId);
+		gameSession = gsu.findGameSession(gameSessionId);
+		gameSessionUser = gsu.addGameSessionUser(gameSession, user);
+		gameSession = gameSessionUser.getGameSession();
+		gameSessionType = MappingUtils
+				.mapGameSessionToGameSessionType(gameSession);
+		entityManager.getTransaction().commit();
+		entityManager.close();
+		// Add the user reply type to the reply
+		getReply().getGameSessionReply().add(gameSessionType);
+
+		return Response.ok(getReply()).build();
+	}
+	
 	
 	/**
 	 * Update a user

@@ -28,11 +28,11 @@
 				<td>returns the request data in json format, good for if you have an xml request that you need to create json data for.  THIS SHOULD BE USED FOR TESTING ONLY, nothing should actively use this api in production</td>
 			</tr>	
 			<tr>
-				<td rowspan="8">User</td>
+				<td rowspan="9">User</td>
 				<td>[base]/user/{userId}</td>
 				<td>GET</td>			
 				<td>None</td>
-				<td rowspan="8"><ul><li>action - string -  "create" to create</li>
+				<td rowspan="9"><ul><li>action - string -  "create" to create</li>
 				<li>showGS - boolean -  Show Game Sessions</li>
 				<li>showQuestions - boolean - Show Questions</li>
 				<li>showTransactions - boolean - Show Transactions</li>				
@@ -69,7 +69,12 @@
 				<td>None</td>
 				<td>spsReply.userReply filled with gameSession and answer information</td>
 			</tr>	
-				
+			<tr>
+				<td>[base]/user/{userId}/gamesession/{gameSessionId}</td>
+				<td>POST</td>			
+				<td>spsRequest with </td>
+				<td>Will add a user to a gamesession</td>
+			</tr>				
 			<tr>
 				<td>[base]/user/{userId}/transactions</td>
 				<td>GET</td>			
@@ -113,26 +118,26 @@
 			</tr>
 			<tr>
 				<td rowspan="4">GameSession</td>
-				<td>[base]/gameSession/{gameSessionId}</td>
+				<td>[base]/gamesession/{gameSessionId}</td>
 				<td>GET</td>			
 				<td>None</td>
 				<td rowSpan="4"><ul><li>showUsers = true/false - return all users in game session</li><li>showQuestions = true/false - return all questions for gameSession</ul></td>
 				<td>Returns spsReply.gameSessionReply information for given gameSessionId</td>
 			</tr>
 			<tr>
-				<td>[base]/gameSession/</td>
+				<td>[base]/gamesession/</td>
 				<td>POST</td>			
 				<td>spsRequest with gameSessionRequest node filled (see snippets)</td>
 				<td>Will add a gameSession and return an spsReply.gameSessionReply</td>
 			</tr>		
 			<tr>
-				<td>[base]/gameSession/{gameSessionId}</td>
+				<td>[base]/gamesession/{gameSessionId}</td>
 				<td>PUT</td>			
 				<td>spsRequest with gameSessionRequest node filled (see snippets)</td>
 				<td>Will update the gameSession based on given questionId and return an spsReply.gameSessionReply</td>
 			</tr>		
 			<tr>
-				<td>[base]/gameSession/{gameSessionId}/question/</td>
+				<td>[base]/gamesession/{gameSessionId}/question/</td>
 				<td>POST</td>			
 				<td>spsRequest with gameSessionRequest.gameSession.question node(s) filled (see snippets)</td>
 				<td>Will add a question to a gameSession and return an spsReply.gameSessionReply.  NOTE: If you want to add an existing question to a game session, make sure you pass in the 'id' node inside of the 'question' node</td>

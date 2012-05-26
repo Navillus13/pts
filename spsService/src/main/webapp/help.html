@@ -28,45 +28,51 @@
 				<td>returns the request data in json format, good for if you have an xml request that you need to create json data for.  THIS SHOULD BE USED FOR TESTING ONLY, nothing should actively use this api in production</td>
 			</tr>	
 			<tr>
-				<td rowspan="4">User</td>
+				<td rowspan="8">User</td>
 				<td>[base]/user/{userId}</td>
 				<td>GET</td>			
 				<td>None</td>
-				<td>None</td>
+				<td rowspan="8"><ul><li>action - string -  "create" to create</li>
+				<li>showGS - boolean -  Show Game Sessions</li>
+				<li>showQuestions - boolean - Show Questions</li>
+				<li>showTransactions - boolean - Show Transactions</li>				
+				</ul></td>
 				<td>Returns spsReply.userReply information for given userId</td>
 			</tr>
 			<tr>
 				<td>[base]/user</td>
 				<td>POST</td>			
 				<td>spsRequest with userRequest node filled (see snippets)</td>
-				<td>action - either "create" or "search"</td>
 				<td>Will perform the associated action and return an spsReply.userReply</td>
 			</tr>		
 			<tr>
 				<td>[base]/user/{userId}</td>
 				<td>PUT</td>			
 				<td>spsRequest with userRequest node filled (see snippets)</td>
-				<td></td>
 				<td>Will update the user based on given userId and return an spsReply.userReply</td>
+			</tr>
+			<tr>
+				<td>[base]/user/{userId}/gamesession/{gameSessionId}/question/{questionId}/answer/</td>
+				<td>POST</td>			
+				<td>spsRequest with answerRequest node filled (see snippets)</td>
+				<td>spsReply.gameSessionReply filled with gameSession and answer information</td>
+			</tr>
+			<tr>
+				<td>[base]/user/{userId}/gamesession/{gameSessionId}/question/{questionId}/answer/{answerId}</td>
+				<td>PUT</td>			
+				<td>spsRequest with answerRequest node filled (see snippets)</td>
+				<td>Will update an answer based on given request and return spsReply.gameSessionReply filled with gameSession and answer information</td>
 			</tr>
 			<tr>
 				<td>[base]/user/{userId}/gameSession/{gameSessionId}</td>
 				<td>GET</td>			
 				<td>None</td>
-				<td>None</td>
 				<td>spsReply.userReply filled with gameSession and answer information</td>
-			</tr>							
-			<tr>
-				<td rowspan="3">Transaction</td>
-				<td>[base]/transaction/{transactionId}</td>
-				<td>GET</td>			
-				<td>None</td>
-				<td>None</td>
-				<td>Returns spsReply.userReply information with shareTransaction node filled for given transactionId</td>
+			</tr>	
+				
 			<tr>
 				<td>[base]/user/{userId}/transactions</td>
 				<td>GET</td>			
-				<td>None</td>
 				<td>None</td>
 				<td>Returns spsReply.userReply with shareTransaction node(s) filled for given userId</td>
 			</tr>
@@ -74,9 +80,15 @@
 				<td>[base]/user/{userId}/transactions</td>
 				<td>POST</td>			
 				<td>spsRequest with userRequest.shareTransaction node filled (see snippets)</td>
-				<td>action - either "create" or "search"</td>
 				<td>Will perform the associated action and return an spsReply.userReply</td>
 			</tr>	
+			<tr>
+				<td rowspan="1">Transaction</td>
+				<td>[base]/transaction/{transactionId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>Returns spsReply.userReply information with shareTransaction node filled for given transactionId</td>
 			<tr>
 				<td rowspan="3">Question</td>
 				<td>[base]/question/{questionId}</td>

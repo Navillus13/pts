@@ -44,6 +44,7 @@ public class GameSessionResource {
 	@Context HttpServletRequest request;
 	@QueryParam("showLinks") boolean showLinks;
 	@QueryParam("action") String action;
+	@QueryParam("showFull") boolean showFull;
 	@QueryParam("showUsers") boolean showUsers;
 	@QueryParam("showQuestions") boolean showQuestions;
 
@@ -76,7 +77,8 @@ public class GameSessionResource {
 		entityManager.getTransaction().begin();
 		GameSession gameSession = gsu.findGameSession(gameSessionId);
 		//Map the user to a user reply type
-		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession, showUsers, showQuestions);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = doOptionalMappings(gameSession, gameSessionType);
 		
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -85,6 +87,16 @@ public class GameSessionResource {
 		
 
 		return Response.ok(getReply()).build();
+	}
+	
+	private GameSessionType doOptionalMappings(GameSession gameSession, GameSessionType gameSessionType) {
+		if(showFull || showUsers) {
+			gameSessionType = MappingUtils.mapUsersToGameSessionType(gameSession, gameSessionType);
+		}
+		if(showFull || showQuestions) {
+			gameSessionType = MappingUtils.mapUsersToGameSessionType(gameSession, gameSessionType);
+		}
+		return gameSessionType;
 	}
 	
 	@PUT
@@ -101,7 +113,9 @@ public class GameSessionResource {
 		GameSession gameSession = gsu.findGameSession(gameSessionId);
 		gameSession = MappingUtils.mapGameSessionTypeToGameSession(spsRequest.getGameSessionRequest().getGameSession(),gameSession);
 		gameSession = gsu.updateGameSession(gameSession);
-		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession, showUsers, showQuestions);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = doOptionalMappings(gameSession, gameSessionType);
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		//Add the user reply type to the reply
@@ -124,7 +138,9 @@ public class GameSessionResource {
 		GameSession gameSession = new GameSession();
 		gameSession = MappingUtils.mapGameSessionTypeToGameSession(spsRequest.getGameSessionRequest().getGameSession(), gameSession);
 		gsu.addGameSession(gameSession);
-		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession, showUsers, showQuestions);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = doOptionalMappings(gameSession, gameSessionType);
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		//Add the user reply type to the reply
@@ -163,7 +179,9 @@ public class GameSessionResource {
 			gsu.addGameSessionQuestion(gameSession, question);
 		}
 	
-		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession, showUsers, showQuestions);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = doOptionalMappings(gameSession, gameSessionType);
+
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		//Add the user reply type to the reply

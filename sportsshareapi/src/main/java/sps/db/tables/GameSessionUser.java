@@ -1,6 +1,7 @@
 package sps.db.tables;
 
 import java.util.Calendar;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,6 +24,7 @@ public class GameSessionUser {
 
     private GameSession gameSession;
     private Users user;
+    private Set<Answer> answers;
 
     private Calendar createDate;
     private Calendar lastUpdateDate;
@@ -59,6 +62,15 @@ public class GameSessionUser {
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	@OneToMany(mappedBy="gameSessionUser", fetch=FetchType.LAZY)
+	public Set<Answer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(Set<Answer> answers) {
+		this.answers = answers;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

@@ -30,48 +30,43 @@ public abstract class MappingUtils {
 		return objectFactory;
 	}
 	
-	/**
-	 * 
-	 * @param userReply - if null a new one will be created, if not null the given userReplyType
-	 * 					  will be updated and the user node completely replaced 
-	 * @param user - hibernate user object
-	 * @param requestURI - requestURI from requester
-	 * @param sessionId - sessiondID
-	 * @param showAddress - true to build address into response
-	 * @param showDates - true to build dates such as createDate and lastLoginDate
-	 * @return userReply 
-	 */
-    public static UserReplyType mapUserToUserReply(UserReplyType userReply, Users user, String requestURI, String sessionId, boolean mapAddress, boolean mapDates, boolean mapTransactions, boolean mapGameSessions) {
-		Set<ShareTransaction> transactions = null;
-		Set<GameSessionUser> gameSessions = null;
+    public static UserReplyType mapUserToUserReply(UserReplyType userReply, Users user, String requestURI, String sessionId) {
     	if(userReply==null) {
     		userReply = getObjectFactory().createUserReplyType();
     	}    	
-   		
+   		UserType userType;
     	//Map User Type
-    	userReply.setUser(mapUserToUserType(user, mapAddress, mapDates));
-		
+    	userType = mapUserToUserType(user);
+    	userType = MappingUtils.mapAddressToUserType(user, userType);
+    	userReply.setUser(userType);
+    	
+    	return userReply;
+    	
+    }
+    
+    public static UserReplyType mapTransactionsToUserReply(Users user, UserReplyType userReply) {
+    	Set<ShareTransaction> transactions = user.getShareTransactions();
     	//Map Transactions Type
-    	if(mapTransactions) {
     		transactions = user.getShareTransactions();
-		
+
     		for(ShareTransaction transaction : transactions) {
     			ShareTransactionType transactionType = mapShareTransToShareTransType(transaction);
     			userReply.getShareTransactions().add(transactionType);
     		}
-    	}
-    	if(mapGameSessions) {
-    		gameSessions = user.getGameSessionUsers();
+    		return userReply;
+    }
+    
+    public static UserReplyType mapGameSessionsToUserReply(Users user, UserReplyType userReply) {
+    	Set<GameSessionUser> gameSessionUsers = user.getGameSessionUsers();
+
     		
-    		for(GameSessionUser gameSessionUser : gameSessions) {
-    			GameSessionType gameSessionType = mapGameSessionToGameSessionType(gameSessionUser.getGameSession(), false, false);
+    		for(GameSessionUser gameSessionUser : gameSessionUsers) {
+    			GameSessionType gameSessionType = mapGameSessionToGameSessionType(gameSessionUser.getGameSession());
     			userReply.getGameSessions().add(gameSessionType);
     		}
-    	}
-   	
-    	return userReply;
-    	
+    		return userReply;
     }
+    
     
     public static QuestionType mapQuestionToQuestionType(Question question) {
     	if(question != null) {
@@ -88,11 +83,14 @@ public abstract class MappingUtils {
     	}
     }
     
-    public static GameSessionType mapAnswerToGameSessionType(Answer answer, GameSessionType gType) {
-    	if(answer != null) {
-    		QuestionType qType = mapQuestionToQuestionType(answer.getQuestion());
-    		qType.setAnswer(mapAnswerToAnswerType(answer));
-    		gType.getQuestion().add(qType);
+    public static GameSessionType mapAnswerToGameSessionType(GameSessionUser gameSessionUser, GameSessionType gType) {
+    	Set<Answer> answers = gameSessionUser.getAnswers();
+    	if(answers != null) {
+    		for(Answer answer: answers) {
+    			QuestionType qType = mapQuestionToQuestionType(answer.getQuestion());
+    			qType.setAnswer(mapAnswerToAnswerType(answer));
+    			gType.getQuestion().add(qType);
+    		}
     	}
     	return gType;
     }
@@ -112,7 +110,7 @@ public abstract class MappingUtils {
     	Set<GameSessionUser> gameSessionUsers = gameSession.getGameSessionUsers();
     	if(gameSessionUsers != null) {
     		for(GameSessionUser gameSessionUser: gameSessionUsers) {
-    			gType.getUser().add(MappingUtils.mapUserToUserType(gameSessionUser.getUser(), false, false));
+    			gType.getUser().add(MappingUtils.mapUserToUserType(gameSessionUser.getUser()));
     		}
     	}
     	return gType;
@@ -120,7 +118,7 @@ public abstract class MappingUtils {
     
     
     
-    public static GameSessionType mapGameSessionToGameSessionType(GameSession gameSession, boolean mapUsers, boolean mapQuestions) {
+    public static GameSessionType mapGameSessionToGameSessionType(GameSession gameSession) {
     	if(gameSession != null) {
     		GameSessionType gType = getObjectFactory().createGameSessionType();
     		gType.setId(gameSession.getId());
@@ -128,12 +126,7 @@ public abstract class MappingUtils {
     		gType.setCategory(gameSession.getCategory());
     		gType.setDescription(gameSession.getDescription());
     		gType.setStatus("Not Started");
-    		if(mapUsers) {
-    			gType = mapUsersToGameSessionType(gameSession, gType);
-    		}
-    		if(mapQuestions) {
-    			gType = mapQuestionsToGameSessionType(gameSession, gType);
-    		}
+
     		return gType;
     	} else {
     		return null;
@@ -172,7 +165,30 @@ public abstract class MappingUtils {
     	return question;
     }
     
-    public static UserType mapUserToUserType(Users user, boolean mapAddress, boolean mapDates) {
+    public static UserType mapAddressToUserType(Users user, UserType uType) {
+		AddressType billingAddress = getObjectFactory().createAddressType();
+		billingAddress.setAddressLine1(user.getBillingAddress1());
+		billingAddress.setAddressLine2(user.getBillingAddress2());
+		billingAddress.setAddressLine3(user.getBillingAddress3());
+		billingAddress.setAddressLine4(user.getBillingAddress4());
+		billingAddress.setCity(user.getBillingCity());
+		billingAddress.setState(user.getBillingState());
+		billingAddress.setZip(user.getBillingZip());
+		uType.setBillingAddress(billingAddress);
+		
+		AddressType shippingAddress = getObjectFactory().createAddressType();
+		shippingAddress.setAddressLine1(user.getShippingAddress1());
+		shippingAddress.setAddressLine2(user.getShippingAddress2());
+		shippingAddress.setAddressLine3(user.getShippingAddress3());
+		shippingAddress.setAddressLine4(user.getShippingAddress4());
+		shippingAddress.setCity(user.getShippingCity());
+		shippingAddress.setState(user.getShippingState());
+		shippingAddress.setZip(user.getShippingZip());
+		uType.setShippingAddress(shippingAddress);  
+		return uType;
+    }
+    
+    public static UserType mapUserToUserType(Users user) {
     	
     	if(user != null) {
     		UserType userType = getObjectFactory().createUserType();
@@ -184,28 +200,7 @@ public abstract class MappingUtils {
     			userType.setId(user.getId());
     		}
     		
-    		if(mapAddress) {
-    			AddressType billingAddress = getObjectFactory().createAddressType();
-    			billingAddress.setAddressLine1(user.getBillingAddress1());
-    			billingAddress.setAddressLine2(user.getBillingAddress2());
-    			billingAddress.setAddressLine3(user.getBillingAddress3());
-    			billingAddress.setAddressLine4(user.getBillingAddress4());
-    			billingAddress.setCity(user.getBillingCity());
-    			billingAddress.setState(user.getBillingState());
-    			billingAddress.setZip(user.getBillingZip());
-    			userType.setBillingAddress(billingAddress);
-    			
-    			AddressType shippingAddress = getObjectFactory().createAddressType();
-    			shippingAddress.setAddressLine1(user.getShippingAddress1());
-    			shippingAddress.setAddressLine2(user.getShippingAddress2());
-    			shippingAddress.setAddressLine3(user.getShippingAddress3());
-    			shippingAddress.setAddressLine4(user.getShippingAddress4());
-    			shippingAddress.setCity(user.getShippingCity());
-    			shippingAddress.setState(user.getShippingState());
-    			shippingAddress.setZip(user.getShippingZip());
-    			userType.setShippingAddress(shippingAddress);    	
-    		}
-    		
+   		
     		return userType;
      	}
     	
@@ -282,7 +277,8 @@ public abstract class MappingUtils {
     public static AnswerType mapAnswerToAnswerType(Answer answer) {
     	AnswerType aType = getObjectFactory().createAnswerType();
     	if(answer != null) {
-    		aType.setAnswer(answer.getAnswer());
+    		aType.setId(answer.getId());
+    		aType.setAnswerText(answer.getAnswer());
     		aType.setAnswerType(answer.getAnswerType());
     		aType.setConfidence(answer.getConfidence());
     		aType.setScore(answer.getScore());   		
@@ -290,5 +286,21 @@ public abstract class MappingUtils {
     	} else {
     		return null;
     	}
+    }
+    
+    public static Answer mapAnswerTypeToAnswer(AnswerType answerType, Answer answer) {
+    	if(answer == null) {
+    		answer = new Answer();
+    	}
+    	if(answerType.getAnswerText() != null) {
+    		answer.setAnswer(answerType.getAnswerText());
+    	}
+    	if(answerType.getAnswerType() != null) {
+    		answer.setAnswerType(answerType.getAnswerType());
+    	}
+   		answer.setConfidence(answerType.getConfidence());
+   		answer.setScore(answerType.getScore());
+   		return answer;
+    	
     }
 }

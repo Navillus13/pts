@@ -86,7 +86,9 @@ public class AnswerUtilTest extends TestCase {
 		
 		entityManager.clear();
 		entityManager.getTransaction().begin();
+		gameSessionUser = gsu.findGameSessionUserByIds(user.getId(), gameSession.getId());
 		assertTrue(au.findAnswersByGameSessionUser(gameSessionUser).size()>0);
+		assertNotNull(gameSessionUser.getAnswers());
 		entityManager.close();
 	
 	}

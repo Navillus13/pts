@@ -1,0 +1,95 @@
+
+<html>
+<head>
+<link rel="StyleSheet" href="assets/css/style.css" type="text/css">
+<script type="text/javascript" src="assets/js/jquery-1.7.1.min.js"></script>
+<script type="text/javascript">                                         
+$(document).ready(function() {
+
+	 
+	   $("#senddata").click(function() {
+			  serviceurl = $("#serviceurl").val();
+			  httpmethod = $("#httpmethod").val();
+			  requesttype = $("#requesttype").val();
+			  responsetype = $("#responsetype").val();
+			  inputdata = $("#input-data").val();
+		  	  $.ajax({
+		  	    headers: { 
+		  	        Accept : responsetype,
+		  	        "Content-Type": requesttype
+		  	    },
+			   	url: serviceurl,
+			   	data: inputdata,
+			   	cache: false,
+			   	type: httpmethod,
+			   	complete: function(jqxhr, status) {
+							$("#output-data").val(jqxhr.responseText);
+			   			  }
+			});	
+		  	  
+		 });
+	   
+	   $("#requestsnippet").change(function() {
+		  	  $.ajax({
+				   	url: $("#requestsnippet").val(),
+				   	cache: false,
+				   	complete: function(jqxhr, status) {
+								$("#input-data").val(jqxhr.responseText);
+				   			  }
+				});	
+	   });  
+	   
+	 });
+ 
+ </script>
+</head>
+<body>
+	<a href="help.html">Documentation</a><br>
+	<textarea id="serviceurl" rows="1" cols="100">http://23.23.181.154:8080/spsService/api/user</textarea>
+	<br>
+	Method:	
+	<select id="httpmethod">
+		<option value="GET">GET</option>
+		<option value="POST">POST</option>
+		<option value="PUT">PUT</option>
+		<option value="DELETE">DELETE</option>
+		<option value="OPTIONS">OPTIONS</option>
+	</select>
+	Request Data Type
+	<select id="requesttype">
+		<option value="application/xml">xml</option>
+		<option value="application/json">json</option>
+	</select>
+	Response Data Type
+	<select id="responsetype">
+		<option value="application/xml">xml</option>
+		<option value="application/json">json</option>
+	</select>
+	<button id="senddata">Send Data</button>
+	<br>
+	Snippet
+	<select id="requestsnippet">
+		<option value="snippets/userRequest-create.xml">Create User</option>
+		<option value="snippets/userRequest-create.json">Create User - JSON</option>
+		<option value="snippets/userRequest-search.xml">Search User</option>
+		<option value="snippets/userRequest-search.json">Search User - JSON</option>		
+		<option value="snippets/transactionRequest-start.xml">Start Transaction</option>
+		<option value="snippets/transactionRequest-start.json">Start Transaction - JSON</option>
+		<option value="snippets/questionRequest-create.xml">Create a Question</option>			
+		<option value="snippets/questionRequest-create.json">Create a Question - JSON</option>	
+		<option value="snippets/gameSession-create.xml">Create a Game Session</option>			
+		<option value="snippets/gameSession-create.json">Create a Game Session - JSON</option>
+		<option value="snippets/gameSession-question-create.xml">Add Question to GameSession - XML</option>	
+		<option value="snippets/gameSession-question-create.json">Add Question to GameSession - JSON</option>	
+	</select>
+	<br>
+	Request Data:
+	<textarea id="input-data" rows="20" cols="50"><request>
+</request>
+</textarea>
+	<br>
+	Response Data
+	<textarea id="output-data" rows="20" cols="50"></textarea>
+
+</body>
+</html>

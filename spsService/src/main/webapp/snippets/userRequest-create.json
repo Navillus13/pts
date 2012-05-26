@@ -1,0 +1,25 @@
+{"userRequest":{
+	"action":"create",
+	"user":{
+		"email":"newemail@email.com",
+		"firstName":"new name",
+		"lastName":"new last",
+		"billingAddress":{
+			"addressLine1":"123 Fake Street",
+			"addressLine2":"",
+			"addressLine3":"",
+			"addressLine4":"",
+			"city":"Palatine",
+			"state":"IL",
+			"zip":"60074",
+			"phone":""},
+		"shippingAddress": {
+			"addressLine1":"123 Fake Street",
+			"addressLine2":"",
+			"addressLine3":"",
+			"addressLine4":"",
+			"city":"Palatine",
+			"state":"IL",
+			"zip":"60074",
+			"phone":""}
+}}}

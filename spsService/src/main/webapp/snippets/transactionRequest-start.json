@@ -1,0 +1,11 @@
+{"userRequest":{
+	"action":"create",
+	"shareTransaction":{
+		"user":{"id":"1"},
+		"quantity":"2",
+		"pointsPer":"10",
+		"pricePer":"5.0",
+		"totalPrice":"0.0",
+		"totalPoints":"0",
+		"gameSessionId":"1"}
+}}

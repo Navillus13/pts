@@ -1,0 +1,10 @@
+{"gameSessionRequest":{
+	"gameSession":{
+		"question":{
+			"id":"0",
+			"category":"something",
+			"correctAnswer":"",
+			"defaultAnswer":"200",
+			"answerType":"NUMERIC",
+			"questionText":"I'm Ron Burgundy?"}
+}}}

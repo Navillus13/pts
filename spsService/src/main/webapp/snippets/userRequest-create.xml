@@ -1,0 +1,30 @@
+<spsRequest>
+	<userRequest>
+		<action>create</action>
+		<user>
+			<email></email>
+			<firstName></firstName>
+			<lastName></lastName>
+			<billingAddress>
+				<addressLine1></addressLine1>
+				<addressLine2></addressLine2>
+				<addressLine3></addressLine3>
+				<addressLine4></addressLine4>
+				<city></city>
+				<state></state>
+				<zip></zip>
+				<phone></phone>
+			</billingAddress>
+			<shippingAddress>
+				<addressLine1></addressLine1>
+				<addressLine2></addressLine2>
+				<addressLine3></addressLine3>
+				<addressLine4></addressLine4>
+				<city></city>
+				<state></state>
+				<zip></zip>
+				<phone></phone>
+			</shippingAddress>
+		</user>
+	</userRequest>
+</spsRequest>

@@ -1,0 +1,131 @@
+
+<html>
+<head>
+<link rel="StyleSheet" href="assets/css/style.css" type="text/css">
+</head>
+<body>
+	URL Structure [base] is your location to access the rest API
+	<br>
+	For Example running the server on a local pc my [base] = http://localhost:8080/spsService/api/
+	<br>
+	For the one running on amazon [base] = http://23.23.181.154:8080/spsService/api
+	<br>
+	<table class="sample" >
+			<tr>
+				<th>Resource</th>
+				<th>URL</th>
+				<th>METHOD</th>			
+				<th>Posted Data</th>
+				<th>Query Parameters</th>
+				<th>Description</th>
+			</tr>
+			<tr>
+				<td>Utility</td>
+				<td>[base]/util/xmltojson</td>
+				<td>POST</td>			
+				<td>any spsRequest data, the json representation will be returned</td>
+				<td>None</td>
+				<td>returns the request data in json format, good for if you have an xml request that you need to create json data for.  THIS SHOULD BE USED FOR TESTING ONLY, nothing should actively use this api in production</td>
+			</tr>	
+			<tr>
+				<td rowspan="4">User</td>
+				<td>[base]/user/{userId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>Returns spsReply.userReply information for given userId</td>
+			</tr>
+			<tr>
+				<td>[base]/user</td>
+				<td>POST</td>			
+				<td>spsRequest with userRequest node filled (see snippets)</td>
+				<td>action - either "create" or "search"</td>
+				<td>Will perform the associated action and return an spsReply.userReply</td>
+			</tr>		
+			<tr>
+				<td>[base]/user/{userId}</td>
+				<td>PUT</td>			
+				<td>spsRequest with userRequest node filled (see snippets)</td>
+				<td></td>
+				<td>Will update the user based on given userId and return an spsReply.userReply</td>
+			</tr>
+			<tr>
+				<td>[base]/user/{userId}/gameSession/{gameSessionId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>spsReply.userReply filled with gameSession and answer information</td>
+			</tr>							
+			<tr>
+				<td rowspan="3">Transaction</td>
+				<td>[base]/transaction/{transactionId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>Returns spsReply.userReply information with shareTransaction node filled for given transactionId</td>
+			<tr>
+				<td>[base]/user/{userId}/transactions</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>Returns spsReply.userReply with shareTransaction node(s) filled for given userId</td>
+			</tr>
+			<tr>
+				<td>[base]/user/{userId}/transactions</td>
+				<td>POST</td>			
+				<td>spsRequest with userRequest.shareTransaction node filled (see snippets)</td>
+				<td>action - either "create" or "search"</td>
+				<td>Will perform the associated action and return an spsReply.userReply</td>
+			</tr>	
+			<tr>
+				<td rowspan="3">Question</td>
+				<td>[base]/question/{questionId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td>None</td>
+				<td>Returns spsReply.questionReply information for given questionId</td>
+			</tr>
+			<tr>
+				<td>[base]/question/</td>
+				<td>POST</td>			
+				<td>spsRequest with userRequest node filled (see snippets)</td>
+				<td>None</td>
+				<td>Will add a question and return an spsReply.questionReply</td>
+			</tr>		
+			<tr>
+				<td>[base]/question/{questionId}</td>
+				<td>PUT</td>			
+				<td>spsRequest with questionRequest node filled (see snippets)</td>
+				<td></td>
+				<td>Will update the question based on given questionId and return an spsReply.questionReply</td>
+			</tr>
+			<tr>
+				<td rowspan="4">GameSession</td>
+				<td>[base]/gameSession/{gameSessionId}</td>
+				<td>GET</td>			
+				<td>None</td>
+				<td rowSpan="4"><ul><li>showUsers = true/false - return all users in game session</li><li>showQuestions = true/false - return all questions for gameSession</ul></td>
+				<td>Returns spsReply.gameSessionReply information for given gameSessionId</td>
+			</tr>
+			<tr>
+				<td>[base]/gameSession/</td>
+				<td>POST</td>			
+				<td>spsRequest with gameSessionRequest node filled (see snippets)</td>
+				<td>Will add a gameSession and return an spsReply.gameSessionReply</td>
+			</tr>		
+			<tr>
+				<td>[base]/gameSession/{gameSessionId}</td>
+				<td>PUT</td>			
+				<td>spsRequest with gameSessionRequest node filled (see snippets)</td>
+				<td>Will update the gameSession based on given questionId and return an spsReply.gameSessionReply</td>
+			</tr>		
+			<tr>
+				<td>[base]/gameSession/{gameSessionId}/question/</td>
+				<td>POST</td>			
+				<td>spsRequest with gameSessionRequest.gameSession.question node(s) filled (see snippets)</td>
+				<td>Will add a question to a gameSession and return an spsReply.gameSessionReply.  NOTE: If you want to add an existing question to a game session, make sure you pass in the 'id' node inside of the 'question' node</td>
+			</tr>					
+	</table>	
+
+</body>
+</html>

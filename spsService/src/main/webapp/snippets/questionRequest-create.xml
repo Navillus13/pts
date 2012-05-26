@@ -1,0 +1,11 @@
+<spsRequest>
+	<questionRequest>
+		<question>
+			<category></category>
+			<correctAnswer></correctAnswer>
+			<defaultAnswer></defaultAnswer>
+			<answerType></answerType>
+			<questionText></questionText>
+		</question>
+	</questionRequest>
+</spsRequest>

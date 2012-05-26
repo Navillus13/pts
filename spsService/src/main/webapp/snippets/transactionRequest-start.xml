@@ -1,0 +1,14 @@
+<spsRequest>
+	<userRequest>
+		<action>create</action>
+		<shareTransaction>
+			<user>
+				<id>1</id>
+			</user>
+			<quantity>10</quantity>
+			<pointsPer>10</pointsPer>
+			<pricePer>5</pricePer>
+			<gameSessionId>1</gameSessionId>
+		</shareTransaction>
+	</userRequest>
+</spsRequest>

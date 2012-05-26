@@ -1,0 +1,24 @@
+table.sample {
+	border-width: thick;
+	border-spacing: 3px;
+	border-style: outset;
+	border-color: gray;
+	border-collapse: collapse;
+	background-color: rgb(255, 255, 240);
+}
+table.sample th {
+	border-width: 1px;
+	padding: 2px;
+	border-style: inset;
+	border-color: gray;
+	background-color: rgb(255, 255, 240);
+	-moz-border-radius: ;
+}
+table.sample td {
+	border-width: 1px;
+	padding: 2px;
+	border-style: inset;
+	border-color: gray;
+	background-color: rgb(255, 255, 240);
+	-moz-border-radius: ;
+}

@@ -1,0 +1,13 @@
+<spsRequest>
+	<gameSessionRequest>
+		<gameSession>
+			<question>
+				<category>something</category>
+				<correctAnswer></correctAnswer>
+				<defaultAnswer>200</defaultAnswer>
+				<answerType>NUMERIC</answerType>
+				<questionText>I'm Ron Burgundy?</questionText>
+			</question>
+		</gameSession>
+	</gameSessionRequest>
+</spsRequest>

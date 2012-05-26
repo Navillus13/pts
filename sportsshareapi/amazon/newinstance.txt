@@ -1,0 +1,20 @@
+sudo apt-get install openjdk-6-jre-headless
+sudo apt-get install tomcat7
+sudo apt-get install tomcat7-admin 
+export CATALINA_HOME
+
+https://help.ubuntu.com/community/PostgreSQL
+sudo apt-get install postgresql-9.1 postgresql-client-9.1
+sudo -u postgres createuser --superuser developer
+sudo -u postgres psql
+\password developer
+sudo apt-get install postgresql-contrib
+sudo vi /etc/postgresql/9.1/main/pg_hba.conf - Edit to be md5 rather than peer
+sudo -u postgres createdb -O myuser mydb
+sudo /etc/init.d/postgresql restart
+
+sudo apt-get install maven2
+sudo apt-get install git
+
+sudo apt-get install openjdk-6-jdk
+

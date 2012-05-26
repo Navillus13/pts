@@ -1,0 +1,7 @@
+{"gameSessionRequest":{
+	"action":"create",
+	"gameSession":{
+		"maxUsers":"2000",
+		"category":"",
+		"description":""}
+}}

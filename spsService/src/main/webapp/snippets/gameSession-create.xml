@@ -1,0 +1,10 @@
+<spsRequest>
+	<gameSessionRequest>
+		<action>create</action>
+		<gameSession>
+			<maxUsers>500</maxUsers>
+			<category></category>
+			<description></description>
+		</gameSession>		
+	</gameSessionRequest>
+</spsRequest>

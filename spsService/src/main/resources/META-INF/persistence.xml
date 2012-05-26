@@ -1,0 +1,32 @@
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
+
+    <persistence-unit name="sps.db.jpa">
+        <description>
+            Persistence unit for the JPA tutorial of the Hibernate Getting Started Guide
+        </description>
+        <class>sps.db.tables.Users</class>
+        <class>sps.db.tables.UserSession</class>
+        <class>sps.db.tables.Performer</class>
+        <class>sps.db.tables.ShareTransaction</class>
+        <class>sps.db.tables.GameSession</class>
+        <class>sps.db.tables.GameSessionQuestion</class>
+        <class>sps.db.tables.GameSessionUser</class>
+        <class>sps.db.tables.Question</class>
+        <class>sps.db.tables.Answer</class>
+        
+        
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/sportshare" />
+            <property name="javax.persistence.jdbc.user" value="developer" />
+            <property name="javax.persistence.jdbc.password" value="developer66" />
+
+            <property name="hibernate.show_sql" value="true" />
+	   		<property name="hibernate.hbm2ddl.auto" value="update" /> 
+
+        </properties>
+    </persistence-unit>
+</persistence>

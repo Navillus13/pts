@@ -1,0 +1,223 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.1.3
+-- Dumped by pg_dump version 9.1.3
+-- Started on 2012-05-18 18:23:45 CDT
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 165 (class 3079 OID 11681)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 1919 (class 0 OID 0)
+-- Dependencies: 165
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 161 (class 1259 OID 30715)
+-- Dependencies: 5
+-- Name: performer; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE performer (
+    id bigint NOT NULL,
+    category character varying(255),
+    create_date timestamp without time zone,
+    description character varying(255),
+    update_date timestamp without time zone,
+    maxshares bigint NOT NULL,
+    name character varying(255),
+    shareprice numeric(19,2)
+);
+
+
+--
+-- TOC entry 162 (class 1259 OID 30723)
+-- Dependencies: 5
+-- Name: share_transaction; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE share_transaction (
+    id bigint NOT NULL,
+    create_date timestamp without time zone,
+    update_date timestamp without time zone,
+    performerid bigint NOT NULL,
+    pointsper integer NOT NULL,
+    priceper numeric(19,2),
+    quantity integer NOT NULL,
+    sessionid character varying(255),
+    totalpoints bigint NOT NULL,
+    totalprice numeric(19,2),
+    userid bigint NOT NULL
+);
+
+
+--
+-- TOC entry 164 (class 1259 OID 30738)
+-- Dependencies: 5
+-- Name: user_session; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE user_session (
+    id bigint NOT NULL,
+    create_date timestamp without time zone,
+    update_date timestamp without time zone,
+    sessionid character varying(255),
+    userid bigint
+);
+
+
+--
+-- TOC entry 163 (class 1259 OID 30728)
+-- Dependencies: 5
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE users (
+    id bigint NOT NULL,
+    billingaddress1 character varying(255),
+    billingaddress2 character varying(255),
+    billingaddress3 character varying(255),
+    billingaddress4 character varying(255),
+    billingcity character varying(255),
+    billingstate character varying(255),
+    billingzip character varying(255),
+    create_date timestamp without time zone,
+    email character varying(255) NOT NULL,
+    firstname character varying(255),
+    login_date timestamp without time zone,
+    lastname character varying(255),
+    update_date timestamp without time zone,
+    password character varying(255),
+    shippingaddress1 character varying(255),
+    shippingaddress2 character varying(255),
+    shippingaddress3 character varying(255),
+    shippingaddress4 character varying(255),
+    shippingcity character varying(255),
+    shippingstate character varying(255),
+    shippingzip character varying(255)
+);
+
+
+--
+-- TOC entry 1911 (class 0 OID 30715)
+-- Dependencies: 161
+-- Data for Name: performer; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO performer VALUES (1, 'NFL Football Team', '2012-05-18 18:00:58.21', 'The best team in the NFL....in 1985', '2012-05-18 18:00:58.21', 100000, 'Chicago Bears', 1.00);
+
+
+--
+-- TOC entry 1912 (class 0 OID 30723)
+-- Dependencies: 162
+-- Data for Name: share_transaction; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO share_transaction VALUES (1, '2012-05-18 18:00:57.671', '2012-05-18 18:00:57.671', 1, 10, 5.00, 2, NULL, 20, 10.00, 1);
+
+
+--
+-- TOC entry 1914 (class 0 OID 30738)
+-- Dependencies: 164
+-- Data for Name: user_session; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO user_session VALUES (3, '2012-05-18 18:00:58.133', '2012-05-18 18:00:58.133', 'invalid', NULL);
+
+
+--
+-- TOC entry 1913 (class 0 OID 30728)
+-- Dependencies: 163
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+INSERT INTO users VALUES (2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2012-05-18 18:00:57.864', 'simple@somple.com', NULL, NULL, NULL, '2012-05-18 18:00:57.864', 'pass', NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
+
+--
+-- TOC entry 1901 (class 2606 OID 30722)
+-- Dependencies: 161 161
+-- Name: performer_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY performer
+    ADD CONSTRAINT performer_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1903 (class 2606 OID 30727)
+-- Dependencies: 162 162
+-- Name: share_transaction_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY share_transaction
+    ADD CONSTRAINT share_transaction_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1909 (class 2606 OID 30742)
+-- Dependencies: 164 164
+-- Name: user_session_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY user_session
+    ADD CONSTRAINT user_session_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1905 (class 2606 OID 30737)
+-- Dependencies: 163 163
+-- Name: users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- TOC entry 1907 (class 2606 OID 30735)
+-- Dependencies: 163 163
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1910 (class 2606 OID 30743)
+-- Dependencies: 1906 164 163
+-- Name: fk_users_usersession; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY user_session
+    ADD CONSTRAINT fk_users_usersession FOREIGN KEY (userid) REFERENCES users(id);
+
+
+-- Completed on 2012-05-18 18:23:45 CDT
+
+--
+-- PostgreSQL database dump complete
+--
+

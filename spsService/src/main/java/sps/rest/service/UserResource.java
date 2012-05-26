@@ -45,8 +45,7 @@ import sps.schema.utils.MappingUtils;
 @Path("/user")
 public class UserResource {
 
-	private EntityManagerFactory entityManagerFactory = PersistenceUtil
-			.getEntityManagerFactory();
+	private EntityManagerFactory entityManagerFactory = PersistenceUtil.getEntityManagerFactory();
 	private EntityManager entityManager;
 
 	public static String ACTION_CREATE = "create";
@@ -102,8 +101,8 @@ public class UserResource {
 		entityManager.getTransaction().begin();
 		Users user = uu.findUser(userId);
 		// Map the user to a user reply type
-		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user,
-				request.getRequestURI(), request.getSession().getId());
+		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+				.getSession().getId());
 		userReplyType = doOptionalMappings(user, userReplyType);
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -113,24 +112,19 @@ public class UserResource {
 		return Response.ok(getReply()).build();
 	}
 
-	private UserReplyType doOptionalMappings(Users user,
-			UserReplyType userReplyType) {
+	private UserReplyType doOptionalMappings(Users user, UserReplyType userReplyType) {
 		GameSessionType gameSessionType = null;
 		if (showFull || showTransactions) {
-			userReplyType = MappingUtils.mapTransactionsToUserReply(user,
-					userReplyType);
+			userReplyType = MappingUtils.mapTransactionsToUserReply(user, userReplyType);
 		}
 		if (showFull || showGameSessions) {
-			userReplyType = MappingUtils.mapGameSessionsToUserReply(user,
-					userReplyType);
+			userReplyType = MappingUtils.mapGameSessionsToUserReply(user, userReplyType);
 		}
-		if ((showFull || showQuestions)
-				&& userReplyType.getGameSessions() != null
+		if ((showFull || showQuestions) && userReplyType.getGameSessions() != null
 				&& userReplyType.getGameSessions().size() > 0) {
 			gameSessionType = userReplyType.getGameSessions().get(0);
 			for (GameSessionUser gameSessionUser : user.getGameSessionUsers()) {
-				gameSessionType = MappingUtils.mapAnswerToGameSessionType(
-						gameSessionUser, gameSessionType);
+				gameSessionType = MappingUtils.mapAnswerToGameSessionType(gameSessionUser, gameSessionType);
 			}
 
 		}
@@ -152,8 +146,8 @@ public class UserResource {
 		// Find the user
 		Users user = uu.findUser(email);
 		// Map the user to a user reply type
-		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user,
-				request.getRequestURI(), request.getSession().getId());
+		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+				.getSession().getId());
 		userReplyType = doOptionalMappings(user, userReplyType);
 
 		entityManager.getTransaction().commit();
@@ -167,8 +161,7 @@ public class UserResource {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/gameSession/{gameSessionId}")
-	public Response retrieveGameSessionByUserAndId(
-			@PathParam("userId") long userId,
+	public Response retrieveGameSessionByUserAndId(@PathParam("userId") long userId,
 			@PathParam("gameSessionId") long gameSessionId) {
 		UserReplyType userReplyType = null;
 		UsersUtil uu = new UsersUtil(entityManager);
@@ -179,22 +172,17 @@ public class UserResource {
 		entityManager.clear();
 		entityManager.getTransaction().begin();
 		Users user = uu.findUser(userId);
-		GameSessionUser gameSessionUser = gsu.findGameSessionUserByIds(userId,
-				gameSessionId);
+		GameSessionUser gameSessionUser = gsu.findGameSessionUserByIds(userId, gameSessionId);
 		if (gameSessionUser != null) {
 			// Map the user to a user reply type
-			userReplyType = MappingUtils
-					.mapUserToUserReply(userReplyType, user, request
-							.getRequestURI(), request.getSession().getId());
+			userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+					.getSession().getId());
 			// Map the Game Session type
-			GameSessionType gameSessionType = MappingUtils
-					.mapGameSessionToGameSessionType(gameSessionUser
-							.getGameSession());
-			List<Answer> answers = au
-					.findAnswersByGameSessionUser(gameSessionUser);
+			GameSessionType gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSessionUser
+					.getGameSession());
+			List<Answer> answers = au.findAnswersByGameSessionUser(gameSessionUser);
 			for (Answer answer : answers) {
-				gameSessionType = MappingUtils.mapAnswerToGameSessionType(
-						gameSessionUser, gameSessionType);
+				gameSessionType = MappingUtils.mapAnswerToGameSessionType(gameSessionUser, gameSessionType);
 			}
 			userReplyType.getGameSessions().add(gameSessionType);
 		}
@@ -226,10 +214,9 @@ public class UserResource {
 		Users user = uu.findUser(userId);
 
 		// Map the user to a user reply type
-		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user,
-				request.getRequestURI(), request.getSession().getId());
-		userReplyType = MappingUtils.mapTransactionsToUserReply(user,
-				userReplyType);
+		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+				.getSession().getId());
+		userReplyType = MappingUtils.mapTransactionsToUserReply(user, userReplyType);
 		userReplyType = doOptionalMappings(user, userReplyType);
 		entityManager.getTransaction().commit();
 		entityManager.close();
@@ -261,9 +248,7 @@ public class UserResource {
 		}
 
 		if (action == null || action.length() == 0) {
-			return Response.status(406)
-					.entity("Query Parameter Action is null and should not be")
-					.build();
+			return Response.status(406).entity("Query Parameter Action is null and should not be").build();
 		}
 
 		if (action.equalsIgnoreCase(ACTION_CREATE)) {
@@ -272,8 +257,8 @@ public class UserResource {
 			Users user = new Users();
 			user = MappingUtils.mapUserTypeToUser(userRequest.getUser(), user);
 			user = uu.addUser(user);
-			userReply = MappingUtils.mapUserToUserReply(userReply, user,
-					request.getRequestURI(), request.getSession().getId());
+			userReply = MappingUtils.mapUserToUserReply(userReply, user, request.getRequestURI(), request.getSession()
+					.getId());
 			userReply = doOptionalMappings(user, userReply);
 
 			entityManager.getTransaction().commit();
@@ -283,25 +268,17 @@ public class UserResource {
 		} else if (action.equalsIgnoreCase(ACTION_SEARCH)) {
 
 			// Search by ID
-			if (userRequest.getUser() != null
-					&& userRequest.getUser().getId() > 0) {
+			if (userRequest.getUser() != null && userRequest.getUser().getId() > 0) {
 				return retrieveUserById(userRequest.getUser().getId());
-			} else if (userRequest.getUser() != null
-					&& userRequest.getUser().getEmail() != null
+			} else if (userRequest.getUser() != null && userRequest.getUser().getEmail() != null
 					&& userRequest.getUser().getEmail().length() > 0) {
 				return retrieveUserByEmail(userRequest.getUser().getEmail());
 			} else {
-				return Response
-						.status(404)
-						.entity("User could not be obtained from information provided")
-						.build();
+				return Response.status(404).entity("User could not be obtained from information provided").build();
 			}
 		}
 
-		return Response
-				.status(406)
-				.entity("Action: " + action
-						+ " is not a vlid action besed on incoming request")
+		return Response.status(406).entity("Action: " + action + " is not a vlid action besed on incoming request")
 				.build();
 
 	}
@@ -317,8 +294,7 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/transactions")
-	public Response postTransaction(SpsRequest fullRequest,
-			@PathParam("userId") long userId) {
+	public Response postTransaction(SpsRequest fullRequest, @PathParam("userId") long userId) {
 		UserRequestType userRequest = null;
 		UserReplyType userReplyType = null;
 		UsersUtil uu = new UsersUtil(entityManager);
@@ -329,25 +305,21 @@ public class UserResource {
 		action = userRequest.getAction();
 
 		if (action == null) {
-			return Response.status(406)
-					.entity("Query Parameter Action is null and should not be")
-					.entity(fullRequest).build();
+			return Response.status(406).entity("Query Parameter Action is null and should not be").entity(fullRequest)
+					.build();
 		}
 
 		if (action.equalsIgnoreCase(ACTION_CREATE)) {
 			entityManager.clear();
 			entityManager.getTransaction().begin();
 			Users user = uu.findUser(userId);
-			ShareTransaction transaction = MappingUtils
-					.mapTransactionTypeToTransaction(
-							userRequest.getShareTransaction(), user, null);
+			ShareTransaction transaction = MappingUtils.mapTransactionTypeToTransaction(
+					userRequest.getShareTransaction(), user, null);
 			transaction = su.startShareTransaction(transaction);
-			userReplyType = MappingUtils
-					.mapUserToUserReply(userReplyType, user, request
-							.getRequestURI(), request.getSession().getId());
+			userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+					.getSession().getId());
 			userReplyType = doOptionalMappings(user, userReplyType);
-			userReplyType.getShareTransactions().add(
-					MappingUtils.mapShareTransToShareTransType(transaction));
+			userReplyType.getShareTransactions().add(MappingUtils.mapShareTransToShareTransType(transaction));
 			entityManager.getTransaction().commit();
 			entityManager.close();
 			getReply().getUserReply().add(userReplyType);
@@ -358,10 +330,7 @@ public class UserResource {
 
 		}
 
-		return Response
-				.status(406)
-				.entity("Action: " + action
-						+ " is not a valid action besed on incoming request")
+		return Response.status(406).entity("Action: " + action + " is not a valid action besed on incoming request")
 				.build();
 
 	}
@@ -370,10 +339,8 @@ public class UserResource {
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/gamesession/{gameSessionId}/question/{questionId}/answer/")
-	public Response addAnswerToGameSession(SpsRequest spsRequest,
-			@PathParam("userId") long userId,
-			@PathParam("gameSessionId") long gameSessionId,
-			@PathParam("questionId") long questionId) {
+	public Response addAnswerToGameSession(SpsRequest spsRequest, @PathParam("userId") long userId,
+			@PathParam("gameSessionId") long gameSessionId, @PathParam("questionId") long questionId) {
 		GameSessionUser gameSessionUser = null;
 		GameSession gameSession = null;
 		GameSessionType gameSessionType;
@@ -391,11 +358,9 @@ public class UserResource {
 		Answer answer = new Answer();
 		answer = MappingUtils.mapAnswerTypeToAnswer(aType, answer);
 		answer = au.addAnswer(answer, question, gameSessionUser);
-		gameSessionType = MappingUtils
-				.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
 		entityManager.refresh(gameSessionUser);
-		gameSessionType = MappingUtils.mapAnswerToGameSessionType(
-				gameSessionUser, gameSessionType);
+		gameSessionType = MappingUtils.mapAnswerToGameSessionType(gameSessionUser, gameSessionType);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		// Add the user reply type to the reply
@@ -405,46 +370,44 @@ public class UserResource {
 	}
 
 	@PUT
-	@Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-	@Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/gamesession/{gameSessionId}/question/{questionId}/answer/{answerId}")
-	public Response updateAnswerToGameSession(SpsRequest spsRequest, @PathParam("userId") long userId, @PathParam("gameSessionId") long gameSessionId, @PathParam("questionId") long questionId, @PathParam("answerId") long answerId) {
+	public Response updateAnswerToGameSession(SpsRequest spsRequest, @PathParam("userId") long userId,
+			@PathParam("gameSessionId") long gameSessionId, @PathParam("questionId") long questionId,
+			@PathParam("answerId") long answerId) {
 		GameSessionUser gameSessionUser = null;
-		GameSession gameSession=null;
+		GameSession gameSession = null;
 		GameSessionType gameSessionType;
 		GameSessionUtil gsu = new GameSessionUtil(entityManager);
 		QuestionUtil qu = new QuestionUtil(entityManager);
 		AnswerUtil au = new AnswerUtil(entityManager);
 		AnswerType aType = spsRequest.getAnswerRequest().getAnswer();
 
-		//Find the user
+		// Find the user
 		entityManager.clear();
 		entityManager.getTransaction().begin();
 		gameSessionUser = gsu.findGameSessionUserByIds(userId, gameSessionId);
 		gameSession = gameSessionUser.getGameSession();
 		Question question = qu.findQuestion(questionId);
 		Answer answer = au.findAnswer(answerId);
-		answer = MappingUtils.mapAnswerTypeToAnswer(aType, answer);	
-		answer = au.addAnswer(answer, question, gameSessionUser);	
+		answer = MappingUtils.mapAnswerTypeToAnswer(aType, answer);
+		answer = au.addAnswer(answer, question, gameSessionUser);
 		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
 		entityManager.refresh(gameSessionUser);
 		gameSessionType = MappingUtils.mapAnswerToGameSessionType(gameSessionUser, gameSessionType);
 		entityManager.getTransaction().commit();
 		entityManager.close();
-		//Add the user reply type to the reply
+		// Add the user reply type to the reply
 		getReply().getGameSessionReply().add(gameSessionType);
 
-
 		return Response.ok(getReply()).build();
-	}	
-	
+	}
+
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/gamesession/{gameSessionId}/")
-	public Response addUserToGameSession(SpsRequest spsRequest,
-			@PathParam("userId") long userId,
-			@PathParam("gameSessionId") long gameSessionId) {
+	public Response addUserToGameSession(@PathParam("userId") long userId,@PathParam("gameSessionId") long gameSessionId) {
 		GameSessionUser gameSessionUser = null;
 		GameSession gameSession = null;
 		GameSessionType gameSessionType;
@@ -461,8 +424,7 @@ public class UserResource {
 		gameSession = gsu.findGameSession(gameSessionId);
 		gameSessionUser = gsu.addGameSessionUser(gameSession, user);
 		gameSession = gameSessionUser.getGameSession();
-		gameSessionType = MappingUtils
-				.mapGameSessionToGameSessionType(gameSession);
+		gameSessionType = MappingUtils.mapGameSessionToGameSessionType(gameSession);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 		// Add the user reply type to the reply
@@ -470,8 +432,7 @@ public class UserResource {
 
 		return Response.ok(getReply()).build();
 	}
-	
-	
+
 	/**
 	 * Update a user
 	 * 
@@ -483,8 +444,7 @@ public class UserResource {
 	@PUT
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}")
-	public Response updateUser(@PathParam("userId") long userId,
-			@FormParam("email") String email,
+	public Response updateUser(@PathParam("userId") long userId, @FormParam("email") String email,
 			@FormParam("password") String password) {
 		UserReplyType userReplyType = null;
 		UsersUtil uu = new UsersUtil(entityManager);
@@ -492,8 +452,8 @@ public class UserResource {
 
 		user = uu.updateUser(userId, email, password);
 
-		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user,
-				request.getRequestURI(), request.getSession().getId());
+		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+				.getSession().getId());
 
 		userReplyType = doOptionalMappings(user, userReplyType);
 
@@ -506,21 +466,19 @@ public class UserResource {
 	@Consumes({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}")
-	public Response updateUser(SpsRequest fullRequest,
-			@PathParam("userId") long userId) {
+	public Response updateUser(SpsRequest fullRequest, @PathParam("userId") long userId) {
 		UserReplyType userReplyType = null;
 		UsersUtil uu = new UsersUtil(entityManager);
 		entityManager.clear();
 		entityManager.getTransaction().begin();
 		Users user = entityManager.find(Users.class, userId);
 
-		user = MappingUtils.mapUserTypeToUser(fullRequest.getUserRequest()
-				.getUser(), user);
+		user = MappingUtils.mapUserTypeToUser(fullRequest.getUserRequest().getUser(), user);
 
 		user = uu.updateUser(user);
 
-		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user,
-				request.getRequestURI(), request.getSession().getId());
+		userReplyType = MappingUtils.mapUserToUserReply(userReplyType, user, request.getRequestURI(), request
+				.getSession().getId());
 		userReplyType = doOptionalMappings(user, userReplyType);
 
 		entityManager.getTransaction().commit();

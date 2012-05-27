@@ -40,7 +40,10 @@ import sps.schema.generated.UserRequestType;
 import sps.schema.utils.MappingUtils;
 
 /**
- * Example resource class hosted at the URI path "/myresource"
+ * User Resource class hosted at the URI path "/user"
+ * This class is used for all actions requiring a user.  This should be the 
+ * most used resource in any client application since obtaining a valid user
+ * is a pre-requsite to many actions
  */
 @Path("/user")
 public class UserResource {
@@ -48,26 +51,58 @@ public class UserResource {
 	private EntityManagerFactory entityManagerFactory = PersistenceUtil.getEntityManagerFactory();
 	private EntityManager entityManager;
 
+	/**
+	 * Create Action identifier
+	 */
 	public static String ACTION_CREATE = "create";
+	/**
+	 * Search Action identifier
+	 */
 	public static String ACTION_SEARCH = "search";
 
+	/**
+	 * Http Request context - holds all informaiton about incoming request from client
+	 */
 	@Context
 	HttpServletRequest request;
-	@QueryParam("showLinks")
-	boolean showLinks;
+	/**
+	 * action parameter -  "create" to create a user
+	 * 					  "search" to search for a user
+	 * Default: ""
+	 * 
+	 * Example: [baseUrl]/user?action=create
+	 */
 	@QueryParam("action")
 	String action;
+	/**
+	 * showFull - "true" to show all related data
+	 * Example: [baseUrl]/user?showFull=true
+	 */
 	@QueryParam("showFull")
 	boolean showFull;
+	
+	/**
+	 * showGS  = "true" to show gameSessions associated with user
+	 * Example: [baseUrl]/user/1?showGS=true
+	 */
 	@QueryParam("showGS")
 	boolean showGameSessions;
+	
+	/**
+	 * showQuestions = "true" to show questions associated with game sessions
+	 * Example: [baseURL]/user/1?showGS=true&showQuestions=true
+	 */
 	@QueryParam("showQuestions")
 	boolean showQuestions;
+	
+	/**
+	 * showTransactions = "true" to show transactions associated with the user
+	 */
 	@QueryParam("showTransactions")
 	boolean showTransactions;
 
 	/**
-	 * 
+	 * Default constructor, will set up connection information for service instance
 	 */
 	public UserResource() {
 		super();
@@ -76,18 +111,18 @@ public class UserResource {
 
 	private SpsReply reply;
 
-	public SpsReply getReply() {
+	private SpsReply getReply() {
 		if (reply == null) {
 			reply = new SpsReply();
 		}
 		return reply;
 	}
-
+	
 	/**
-	 * Retrieve the user by user ID
+	 * GET /user/{userId} - Retrieve the user by user ID 
 	 * 
-	 * @param userId
-	 * @return
+	 * @param userId - path parameter for userID
+	 * @return spsReply with user information filled
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -131,12 +166,6 @@ public class UserResource {
 		return userReplyType;
 	}
 
-	/**
-	 * Retrieve user from email
-	 * 
-	 * @param email
-	 * @return
-	 */
 	private Response retrieveUserByEmail(String email) {
 		UserReplyType userReplyType = null;
 		UsersUtil uu = new UsersUtil(entityManager);
@@ -158,9 +187,15 @@ public class UserResource {
 		return Response.ok(getReply()).build();
 	}
 
+	/**
+	 *  GET /[baseURL]/user/1/gamesession/1 - Get the gamesession by userid and gamesessionid
+	 * 	@param userId
+	 * 	@param gameSessionId
+	 *  @return spsReply with UserReply user and gamesession information filled
+	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	@Path("/{userId}/gameSession/{gameSessionId}")
+	@Path("/{userId}/gamesession/{gameSessionId}")
 	public Response retrieveGameSessionByUserAndId(@PathParam("userId") long userId,
 			@PathParam("gameSessionId") long gameSessionId) {
 		UserReplyType userReplyType = null;

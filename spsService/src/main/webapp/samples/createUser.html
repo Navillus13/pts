@@ -1,0 +1,140 @@
+
+<html>
+<head>
+<link rel="StyleSheet" href="../assets/css/style.css" type="text/css">
+<script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript">
+
+	$(document)
+			.ready(
+					function() {
+						$("#senddata")
+								.click(
+										function() {
+											serviceurl = "http://localhost:8080/spsService/api/user";
+											httpmethod = "POST";
+											requesttype = "application/json";
+											responsetype = "application/json";
+											//get the base request object
+
+											var reqObj = {
+												"bindings" : [ {
+													"userRequest" : {
+														"action" : "",
+														"user" : {
+															"email" : "",
+															"password" : "",
+															"firstName" : "",
+															"lastName" : "",
+															"billingAddress" : {
+																"addressLine1" : "",
+																"addressLine2" : "",
+																"addressLine3" : "",
+																"addressLine4" : "",
+																"city" : "",
+																"state" : "",
+																"zip" : "",
+																"phone" : ""
+															},
+															"shippingAddress" : {
+																"addressLine1" : "",
+																"addressLine2" : "",
+																"addressLine3" : "",
+																"addressLine4" : "",
+																"city" : "",
+																"state" : "",
+																"zip" : "",
+																"phone" : ""
+															}
+														}
+													}
+												} ]
+											};
+
+											reqObj.bindings[0].userRequest.action = "create";
+											reqObj.bindings[0].userRequest.user.email = $(
+													"#email").val();
+											reqObj.bindings[0].userRequest.user.password = $(
+													"#password").val();
+											reqObj.bindings[0].userRequest.user.firstName = $(
+											"#firstname").val();
+											reqObj.bindings[0].userRequest.user.lastName = $(
+											"#lastName").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.addressLine1 = $(
+											"#billing1").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.addressLine2 = $(
+											"#billing2").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.addressLine3 = $(
+											"#billing3").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.addressLine4 = $(
+											"#billing4").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.city = $(
+											"#billingcity").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.state = $(
+											"#billingstate").val();
+											reqObj.bindings[0].userRequest.user.billingAddress.zip = $(
+											"#billingzip").val();
+
+
+
+
+											inputdata = JSON
+													.stringify(reqObj.bindings[0]);
+											$
+													.ajax({
+														headers : {
+															Accept : responsetype,
+															"Content-Type" : requesttype
+														},
+														url : serviceurl,
+														data : inputdata,
+														cache : false,
+														type : httpmethod,
+														complete : function(
+																jqxhr, status) {
+															$("#output-data")
+																	.val(
+																			jqxhr.responseText);
+														}
+													});
+
+										});
+
+					});
+</script>
+</head>
+<body>
+	<div>	
+		E-mail:	<input type="text" id="email" />
+		<br>
+		Password:<input type="text" id="password" />
+	</div>
+	<div>	
+		First Name:	<input type="text" id="firstname" />
+		<br>
+		Last Name:<input type="text" id="lastname" />
+	</div>
+	<div>	
+		Billing Address 1:	<input type="text" id="billing1" />
+		<br>
+		Billing Address 2:	<input type="text" id="billing2" />
+		<br>
+		Billing Address 3:	<input type="text" id="billing3" />
+		<br>
+		Billing Address 4:	<input type="text" id="billing4" />
+		<br>
+		Billing City:	<input type="text" id="billingcity" />	
+		<br>
+		Billing State:	<input type="text" id="billingstate" />
+		<br>
+		Billing Zip:	<input type="text" id="billingzip" />			
+	</div>
+	
+	
+	<button id="senddata">Send Data</button>
+
+
+	<textarea id="output-data" rows="10" cols="60"></textarea>
+
+</body>
+</html>

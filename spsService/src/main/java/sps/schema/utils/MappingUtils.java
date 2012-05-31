@@ -242,6 +242,9 @@ public abstract class MappingUtils {
     		if(userType.getEmail() != null) {
     			user.setEmail(userType.getEmail());
     		}
+    		if(userType.getPassword() != null) {
+    			user.setPassword(userType.getPassword());
+    		}
     		if(userType.getFirstName() != null) {
     			user.setFirstName(userType.getFirstName());
     		}

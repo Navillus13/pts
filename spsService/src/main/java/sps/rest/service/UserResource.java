@@ -32,6 +32,7 @@ import sps.db.tables.utils.QuestionUtil;
 import sps.db.tables.utils.ShareTransactionUtil;
 import sps.db.tables.utils.UsersUtil;
 import sps.schema.generated.AnswerType;
+import sps.schema.generated.ErrorType;
 import sps.schema.generated.GameSessionType;
 import sps.schema.generated.SpsReply;
 import sps.schema.generated.SpsRequest;
@@ -40,10 +41,9 @@ import sps.schema.generated.UserRequestType;
 import sps.schema.utils.MappingUtils;
 
 /**
- * User Resource class hosted at the URI path "/user"
- * This class is used for all actions requiring a user.  This should be the 
- * most used resource in any client application since obtaining a valid user
- * is a pre-requsite to many actions
+ * User Resource class hosted at the URI path "/user" This class is used for all
+ * actions requiring a user. This should be the most used resource in any client
+ * application since obtaining a valid user is a pre-requsite to many actions
  */
 @Path("/user")
 public class UserResource {
@@ -59,50 +59,55 @@ public class UserResource {
 	 * Search Action identifier
 	 */
 	public static String ACTION_SEARCH = "search";
+	/**
+	 * Login Action identifier
+	 */
+	public static String ACTION_LOGIN = "login";
 
 	/**
-	 * Http Request context - holds all informaiton about incoming request from client
+	 * Http Request context - holds all informaiton about incoming request from
+	 * client
 	 */
 	@Context
 	HttpServletRequest request;
 	/**
-	 * action parameter -  "create" to create a user
-	 * 					  "search" to search for a user
-	 * Default: ""
+	 * action parameter - "create" to create a user "search" to search for a
+	 * user Default: ""
 	 * 
 	 * Example: [baseUrl]/user?action=create
 	 */
 	@QueryParam("action")
 	String action;
 	/**
-	 * showFull - "true" to show all related data
-	 * Example: [baseUrl]/user?showFull=true
+	 * showFull - "true" to show all related data Example:
+	 * [baseUrl]/user?showFull=true
 	 */
 	@QueryParam("showFull")
 	boolean showFull;
-	
+
 	/**
-	 * showGS  = "true" to show gameSessions associated with user
-	 * Example: [baseUrl]/user/1?showGS=true
+	 * showGS = "true" to show gameSessions associated with user Example:
+	 * [baseUrl]/user/1?showGS=true
 	 */
 	@QueryParam("showGS")
 	boolean showGameSessions;
-	
+
 	/**
 	 * showQuestions = "true" to show questions associated with game sessions
 	 * Example: [baseURL]/user/1?showGS=true&showQuestions=true
 	 */
 	@QueryParam("showQuestions")
 	boolean showQuestions;
-	
+
 	/**
 	 * showTransactions = "true" to show transactions associated with the user
 	 */
 	@QueryParam("showTransactions")
 	boolean showTransactions;
-	
+
 	/**
-	 * Default constructor, will set up connection information for service instance
+	 * Default constructor, will set up connection information for service
+	 * instance
 	 */
 	public UserResource() {
 		super();
@@ -117,11 +122,12 @@ public class UserResource {
 		}
 		return reply;
 	}
-	
+
 	/**
-	 * GET /user/{userId} - Retrieve the user by user ID 
+	 * GET /user/{userId} - Retrieve the user by user ID
 	 * 
-	 * @param userId - path parameter for userID
+	 * @param userId
+	 *            - path parameter for userID
 	 * @return spsReply with user information filled
 	 */
 	@GET
@@ -188,10 +194,12 @@ public class UserResource {
 	}
 
 	/**
-	 *  GET /[baseURL]/user/1/gamesession/1 - Get the gamesession by userid and gamesessionid
-	 * 	@param userId
-	 * 	@param gameSessionId
-	 *  @return spsReply with UserReply user and gamesession information filled
+	 * GET /[baseURL]/user/1/gamesession/1 - Get the gamesession by userid and
+	 * gamesessionid
+	 * 
+	 * @param userId
+	 * @param gameSessionId
+	 * @return spsReply with UserReply user and gamesession information filled
 	 */
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
@@ -311,7 +319,22 @@ public class UserResource {
 			} else {
 				return Response.status(404).entity("User could not be obtained from information provided").build();
 			}
-		}
+		} else if (action.equalsIgnoreCase(ACTION_LOGIN)) {
+			entityManager.clear();
+			entityManager.getTransaction().begin();
+			Users user = uu.login(userRequest.getUser().getEmail(), userRequest.getUser().getPassword(), "");
+			if(user != null) {
+				userReply = MappingUtils.mapUserToUserReply(userReply, user, request.getRequestURI(), "");		
+				getReply().getUserReply().add(userReply);
+				return Response.ok(getReply()).build();
+			} else {
+				ErrorType errorType = new ErrorType();
+				errorType.setErrorMessage("Invalid Login");
+				errorType.setErrorNumber(1);
+				getReply().getErrors().add(errorType);
+				return Response.status(401).entity(getReply()).build();
+			}
+		} 
 
 		return Response.status(406).entity("Action: " + action + " is not a vlid action besed on incoming request")
 				.build();
@@ -442,7 +465,8 @@ public class UserResource {
 	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	@Path("/{userId}/gamesession/{gameSessionId}/")
-	public Response addUserToGameSession(@PathParam("userId") long userId,@PathParam("gameSessionId") long gameSessionId) {
+	public Response addUserToGameSession(@PathParam("userId") long userId,
+			@PathParam("gameSessionId") long gameSessionId) {
 		GameSessionUser gameSessionUser = null;
 		GameSession gameSession = null;
 		GameSessionType gameSessionType;

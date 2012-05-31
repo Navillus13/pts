@@ -3,9 +3,67 @@
 <head profile="http://gmpg.org/xfn/11">
 <title>Play The Stats</title>
 <script type="text/javascript" src="assets/js/jquery-1.7.2.js"></script> 
+<script type="text/javascript" src="assets/js/model/userRequest.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="imagetoolbar" content="no" />
 <link rel="stylesheet" href="assets/css/layout.css" type="text/css" />
+
+<script type="text/javascript">
+
+	$(document)
+			.ready(
+					function() {
+						$("#submitLogin")
+								.click(
+										function() {
+											serviceurl = "/spsService/api/user";
+											httpmethod = "POST";
+											requesttype = "application/json";
+											responsetype = "application/json";
+											//get the base request object
+
+											var reqObj = inituserRequest();
+
+											reqObj.bindings[0].userRequest.action = "login";
+											reqObj.bindings[0].userRequest.user.email = $(
+													"#email").val();
+											reqObj.bindings[0].userRequest.user.password = $(
+													"#pass").val();
+
+											//reqObj.bindings[0].userRequest.user.billingAddress.state = $(
+											//"#billingstate").val();
+											//reqObj.bindings[0].userRequest.user.billingAddress.zip = $(
+											//"#billingzip").val();
+
+											inputdata = JSON.stringify(reqObj.bindings[0]);
+											$
+													.ajax({
+														headers : {
+															Accept : responsetype,
+															"Content-Type" : requesttype
+														},
+														url : serviceurl,
+														data : inputdata,
+														cache : false,
+														type : httpmethod,
+														success: function (jqxhr, status) {
+																	//Do some stuff here to save user data...login successful
+																	alert("Login Success!");	
+															
+																 },
+														complete : function(
+																jqxhr, status) {
+																//The function has completed
+																//Do something here to either redirect the page
+																//or re-render some elements/grab some other piece of data
+																window.location.replace("home.html");
+														}
+													});
+
+										});
+
+					});
+</script>
 </head>
 <body id="top">
 <div class="wrapper col1">
@@ -18,9 +76,11 @@
       <ul>
         
 	<li>Email:
-    <input type="text" /></li>
+    <input id="email" type="text" /></li>
     <li>Password
-    <input type="password" /></li>   
+    <input id="pass" type="password" /></li>
+    <li><input id="submitLogin" type="submit" class="greenButton" value="Login" />
+    </li>   
       </ul>
     </div>
     <br class="clear" />

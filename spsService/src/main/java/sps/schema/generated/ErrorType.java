@@ -15,17 +15,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for answerRequestType complex type.
+ * <p>Java class for errorType complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="answerRequestType">
+ * &lt;complexType name="errorType">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element name="action" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="answer" type="{}answerType"/>
+ *         &lt;element name="errorMessage" type="{http://www.w3.org/2001/XMLSchema}string"/>
+ *         &lt;element name="errorNumber" type="{http://www.w3.org/2001/XMLSchema}long"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -35,62 +35,54 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "answerRequestType", propOrder = {
-    "action",
-    "answer"
+@XmlType(name = "errorType", propOrder = {
+    "errorMessage",
+    "errorNumber"
 })
-public class AnswerRequestType {
+public class ErrorType {
 
-    protected String action;
     @XmlElement(required = true)
-    protected AnswerType answer;
+    protected String errorMessage;
+    protected long errorNumber;
 
     /**
-     * Gets the value of the action property.
+     * Gets the value of the errorMessage property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getAction() {
-        return action;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     /**
-     * Sets the value of the action property.
+     * Sets the value of the errorMessage property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setAction(String value) {
-        this.action = value;
+    public void setErrorMessage(String value) {
+        this.errorMessage = value;
     }
 
     /**
-     * Gets the value of the answer property.
+     * Gets the value of the errorNumber property.
      * 
-     * @return
-     *     possible object is
-     *     {@link AnswerType }
-     *     
      */
-    public AnswerType getAnswer() {
-        return answer;
+    public long getErrorNumber() {
+        return errorNumber;
     }
 
     /**
-     * Sets the value of the answer property.
+     * Sets the value of the errorNumber property.
      * 
-     * @param value
-     *     allowed object is
-     *     {@link AnswerType }
-     *     
      */
-    public void setAnswer(AnswerType value) {
-        this.answer = value;
+    public void setErrorNumber(long value) {
+        this.errorNumber = value;
     }
 
 }

@@ -1,0 +1,9 @@
+<spsRequest>
+	<userRequest>
+		<action>login</action>
+		<user>
+			<email></email>
+			<password></password>
+		</user>
+	</userRequest>
+</spsRequest>

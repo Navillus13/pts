@@ -5,6 +5,8 @@
 		"password":"",
 		"firstName":"",
 		"lastName":"",
+		"sex":"",
+		"birthdate":"",
 		"billingAddress":{
 			"addressLine1":"",
 			"addressLine2":"",

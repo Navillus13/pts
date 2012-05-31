@@ -100,7 +100,7 @@ public class UserResource {
 	 */
 	@QueryParam("showTransactions")
 	boolean showTransactions;
-
+	
 	/**
 	 * Default constructor, will set up connection information for service instance
 	 */

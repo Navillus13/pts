@@ -41,9 +41,11 @@ public class Users {
 	private String shippingState;
     private String shippingCity;
     private String shippingZip;
+    private String sex;
     
     private Set<GameSessionUser> gameSessionUsers;
     private Set<ShareTransaction> shareTransactions;
+    private Calendar birthDate;
     private Calendar createDate;
     private Calendar lastLoginDate;
     private Calendar lastUpdateDate;
@@ -275,6 +277,22 @@ public class Users {
 
 	public void setShippingZip(String shippingZip) {
 		this.shippingZip = shippingZip;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public Calendar getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Calendar birthDate) {
+		this.birthDate = birthDate;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

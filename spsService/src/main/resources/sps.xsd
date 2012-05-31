@@ -85,10 +85,14 @@
 			</xsd:element>
 			<xsd:element name="firstName" type="xsd:string"></xsd:element>
 			<xsd:element name="lastName" type="xsd:string"></xsd:element>
-			<xsd:element name="billingAddress" type="addressType" minOccurs="0"
-				maxOccurs="1"></xsd:element>
-			<xsd:element name="shippingAddress" type="addressType" minOccurs="0"
-				maxOccurs="1"></xsd:element>
+            <xsd:element name="sex" type="xsd:string"></xsd:element>
+            <xsd:element name="birthDate" type="xsd:date"></xsd:element>
+            <xsd:element name="billingAddress" type="addressType"
+				minOccurs="0" maxOccurs="1">
+			</xsd:element>
+			<xsd:element name="shippingAddress" type="addressType"
+				minOccurs="0" maxOccurs="1">
+			</xsd:element>
 		</xsd:sequence>
 	</xsd:complexType>
 	

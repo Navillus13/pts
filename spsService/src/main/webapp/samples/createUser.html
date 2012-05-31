@@ -3,6 +3,7 @@
 <head>
 <link rel="StyleSheet" href="../assets/css/style.css" type="text/css">
 <script type="text/javascript" src="../assets/js/jquery.js"></script>
+<script type="text/javascript" src="js/model/userRequest.js"></script>
 <script type="text/javascript">
 
 	$(document)
@@ -11,45 +12,13 @@
 						$("#senddata")
 								.click(
 										function() {
-											serviceurl = "http://23.23.181.154:8080/spsService/api/user";
+											serviceurl = "/spsService/api/user";
 											httpmethod = "POST";
 											requesttype = "application/json";
 											responsetype = "application/json";
 											//get the base request object
 
-											var reqObj = {
-												"bindings" : [ {
-													"userRequest" : {
-														"action" : "",
-														"user" : {
-															"email" : "",
-															"password" : "",
-															"firstName" : "",
-															"lastName" : "",
-															"billingAddress" : {
-																"addressLine1" : "",
-																"addressLine2" : "",
-																"addressLine3" : "",
-																"addressLine4" : "",
-																"city" : "",
-																"state" : "",
-																"zip" : "",
-																"phone" : ""
-															},
-															"shippingAddress" : {
-																"addressLine1" : "",
-																"addressLine2" : "",
-																"addressLine3" : "",
-																"addressLine4" : "",
-																"city" : "",
-																"state" : "",
-																"zip" : "",
-																"phone" : ""
-															}
-														}
-													}
-												} ]
-											};
+											var reqObj = inituserRequest();
 
 											reqObj.bindings[0].userRequest.action = "create";
 											reqObj.bindings[0].userRequest.user.email = $(
@@ -78,8 +47,7 @@
 
 
 
-											inputdata = JSON
-													.stringify(reqObj.bindings[0]);
+											inputdata = JSON.stringify(reqObj.bindings[0]);
 											$
 													.ajax({
 														headers : {

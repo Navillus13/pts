@@ -1,7 +1,13 @@
 package sps.schema.utils;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
 import sps.db.tables.Answer;
 import sps.db.tables.GameSession;
@@ -193,15 +199,21 @@ public abstract class MappingUtils {
     	if(user != null) {
     		UserType userType = getObjectFactory().createUserType();
     		
-    		userType.setFirstName(user.getFirstName());
-    		userType.setLastName(user.getLastName());
-    		userType.setEmail(user.getEmail());
+    		try {
     		if(user.getId() != null) {
     			userType.setId(user.getId());
     		}
-    		
+    		userType.setFirstName(user.getFirstName());
+    		userType.setLastName(user.getLastName());
+    		userType.setEmail(user.getEmail());
+    		userType.setBirthDate(toXMLGregorianCalendar(user.getBirthDate()));    		
+    		userType.setSex(user.getSex());
+    		} catch (DatatypeConfigurationException dex) {
+    			System.out.println("Data Type Configuration error on birthdate!");
+    		}
    		
     		return userType;
+    		
      	}
     	
     	return null;
@@ -226,6 +238,7 @@ public abstract class MappingUtils {
     
     public static Users mapUserTypeToUser(UserType userType, Users user) {
     	if(userType != null) {
+    		try {
     		if(userType.getEmail() != null) {
     			user.setEmail(userType.getEmail());
     		}
@@ -234,6 +247,12 @@ public abstract class MappingUtils {
     		}
     		if(userType.getLastName() != null) {
     			user.setLastName(userType.getLastName());
+    		}
+    		if(userType.getBirthDate() != null) {
+    			user.setBirthDate(fromXMLGregorianCalendar(userType.getBirthDate()));
+    		}
+    		if(userType.getSex() != null) {
+    			user.setSex(userType.getSex());
     		}
     		
     		if(userType.getBillingAddress() != null) {
@@ -255,6 +274,10 @@ public abstract class MappingUtils {
     			user.setShippingState(userType.getShippingAddress().getState());
     			user.setShippingZip(userType.getShippingAddress().getZip());
     		}   
+    		} catch (Exception ex) {
+    			System.out.println("Error during mapping userType to user!");
+    			ex.printStackTrace();
+    		}
     		
     		return user;
     	}
@@ -302,5 +325,26 @@ public abstract class MappingUtils {
    		answer.setScore(answerType.getScore());
    		return answer;
     	
+    }
+
+    public static Calendar fromXMLGregorianCalendar(XMLGregorianCalendar xc)
+    		throws DatatypeConfigurationException {
+    	if(xc == null) {
+    		return null;
+    	}
+    	Calendar c = Calendar.getInstance();
+    	c.setTimeInMillis(xc.toGregorianCalendar().getTimeInMillis());
+    	return c;
+    }
+
+    public static XMLGregorianCalendar toXMLGregorianCalendar(Calendar c)
+    		throws DatatypeConfigurationException {
+    	if(c == null) { 
+    		return null;
+    	}
+    	GregorianCalendar gc = new GregorianCalendar();
+    	gc.setTimeInMillis(c.getTimeInMillis());
+    	XMLGregorianCalendar xc = DatatypeFactory.newInstance().newXMLGregorianCalendar(gc);
+    	return xc;
     }
 }

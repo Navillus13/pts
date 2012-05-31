@@ -4,15 +4,20 @@
 <title>Play The Stats</title>
 <script type="text/javascript" src="assets/js/jquery-1.7.2.js"></script> 
 <script type="text/javascript" src="assets/js/model/userRequest.js"></script>
+<script type="text/javascript" src="assets/js/common.js"></script>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta http-equiv="imagetoolbar" content="no" />
 <link rel="stylesheet" href="assets/css/layout.css" type="text/css" />
 
 <script type="text/javascript">
 
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
+		var username = getCookie("username");
+		var userid = getCookie("userid");
+		if(username!=undefined && username.length > 0) {
+			$("#info").html("Welcome " + username + " <a href=home.html onclick=logout()> Logout </a>");
+		}
+		
 						$("#submitLogin")
 								.click(
 										function() {
@@ -30,11 +35,6 @@
 											reqObj.bindings[0].userRequest.user.password = $(
 													"#pass").val();
 
-											//reqObj.bindings[0].userRequest.user.billingAddress.state = $(
-											//"#billingstate").val();
-											//reqObj.bindings[0].userRequest.user.billingAddress.zip = $(
-											//"#billingzip").val();
-
 											inputdata = JSON.stringify(reqObj.bindings[0]);
 											$
 													.ajax({
@@ -48,6 +48,10 @@
 														type : httpmethod,
 														success: function (jqxhr, status) {
 																	//Do some stuff here to save user data...login successful
+																	var username = jqxhr.userReply.user.firstName + jqxhr.userReply.user.lastName;
+																	var userid = jqxhr.userReply.user.id;
+																	setCookie("username",username,365);
+																	setCookie("userid",userid,365);
 																	alert("Login Success!");	
 															
 																 },

@@ -96,6 +96,16 @@ public class GameSessionUtil {
 		return result;
 	}	
 	
+	public List<GameSession> findAllGameSessions() {
+		String hql = "From GameSession order by startDate";
+
+		Query q = entityManager.createQuery(hql);
+
+		List<GameSession> result = q.getResultList();
+		
+		return result;
+	}	
+	
 	public GameSessionUser findGameSessionUserByIds(long userId, long gameSessionId ) {
 		String hql = "From GameSessionUser where user.id = :userId and gameSession.id = :gameSessionId order by lastUpdateDate";
 		GameSessionUser result = null;
@@ -110,6 +120,16 @@ public class GameSessionUtil {
 		} 
 		return result;
 	}	
+	
+	public List<GameSessionUser> findGameSessionUsersByUser(long userId) {
+		String hql = "From GameSessionUser where user.id = :userId order by lastUpdateDate";
+		
+		Query q = entityManager.createQuery(hql);
+		q.setParameter("userId", userId);
+		List<GameSessionUser> results = q.getResultList();
+		
+		return results;
+	}	
 
 	public GameSession updateGameSession(GameSession gameSession) throws Exception {
 		
@@ -122,6 +142,8 @@ public class GameSessionUtil {
 			throw new Exception("Failed to update transaction: " + gameSession.getId());
 		}
 	}
+	
+	
 
 	
 }

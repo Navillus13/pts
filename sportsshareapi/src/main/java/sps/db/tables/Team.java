@@ -15,25 +15,28 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-@Table( name = "GAME_SESSION_USER")
-public class GameSessionUser {
+@Table( name = "TEAM")
+public class Team {
     private Long id;
 
-    private GameSession gameSession;
-    private Users user;
-    private Set<Answer> answers;
-    private double score;
+    private String sport;
+    private String name;
+    private String location;
+    private String description;
+    private Set<Player> players;
 
     private Calendar createDate;
     private Calendar lastUpdateDate;
 
-	public GameSessionUser() {
+	public Team() {
 		// this form used by Hibernate
 	}
-
+	
 	@Id
 	@GeneratedValue(generator="increment")
 	@GenericGenerator(name="increment", strategy = "increment")
@@ -41,45 +44,51 @@ public class GameSessionUser {
 		return id;
     }
 
-    private void setId(Long id) {
+    public void setId(Long id) {
 		this.id = id;
     }
+	
 
-    @ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="game_session_id", nullable=false)
-	public GameSession getGameSession() {
-		return gameSession;
+	public String getSport() {
+		return sport;
 	}
 
-	public void setGameSession(GameSession gameSession) {
-		this.gameSession = gameSession;
+	public void setSport(String sport) {
+		this.sport = sport;
 	}
 
-	@ManyToOne(fetch=FetchType.EAGER)
-    @JoinColumn(name="user_id", nullable=false)
-	public Users getUser() {
-		return user;
+	public String getName() {
+		return name;
 	}
 
-	public void setUser(Users user) {
-		this.user = user;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	@OneToMany(mappedBy="gameSessionUser", fetch=FetchType.LAZY)
-	public Set<Answer> getAnswers() {
-		return answers;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setAnswers(Set<Answer> answers) {
-		this.answers = answers;
-	}
-	@Column(name="score", columnDefinition="Decimal(10,2) default '0.00'")
-	public double getScore() {
-		return score;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public void setScore(double score) {
-		this.score = score;
+	@OneToMany(mappedBy="team")
+	@Cascade({CascadeType.ALL})
+	public Set<Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(Set<Player> players) {
+		this.players = players;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 	@Temporal(TemporalType.TIMESTAMP)

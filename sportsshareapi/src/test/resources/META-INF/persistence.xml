@@ -16,6 +16,8 @@
         <class>sps.db.tables.GameSessionUser</class>
         <class>sps.db.tables.Question</class>
         <class>sps.db.tables.Answer</class>
+        <class>sps.db.tables.Team</class>
+        <class>sps.db.tables.Player</class>
         
         
         <properties>
